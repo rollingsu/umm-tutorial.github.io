@@ -8,16 +8,17 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --surface: #12121a;
-    --surface2: #1a1a26;
-    --border: #2a2a3a;
-    --text: #e8e8f0;
-    --text-dim: #8888a0;
-    --accent: #6c5ce7;
-    --accent2: #a29bfe;
-    --accent3: #fd79a8;
-    --accent4: #00cec9;
+    /* ---- LIGHT PALETTE ---- */
+    --bg: #ffffff;
+    --surface: #f7f7fa;        /* very light grey for cards */
+    --surface2: #eef0f5;       /* slightly darker for badges/chips */
+    --border: #e3e5ec;         /* hairline borders */
+    --text: #14141c;           /* near-black body */
+    --text-dim: #5f6478;       /* muted secondary text */
+    --accent: #5a4fcf;         /* primary purple — slightly darker than dark version for contrast */
+    --accent2: #6c5ce7;        /* primary purple */
+    --accent3: #d63384;        /* darker pink for white-bg contrast */
+    --accent4: #00a8a3;        /* darker teal for white-bg contrast */
     --gradient1: linear-gradient(135deg, #6c5ce7, #a29bfe);
     --gradient2: linear-gradient(135deg, #fd79a8, #e17055);
     --gradient3: linear-gradient(135deg, #00cec9, #81ecec);
@@ -42,7 +43,7 @@
   /* ---- NAV ---- */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(10,10,15,0.85);
+    background: rgba(255,255,255,0.85);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     padding: 0 2rem;
@@ -78,9 +79,9 @@
     position: absolute; top: -50%; left: -50%;
     width: 200%; height: 200%;
     background:
-      radial-gradient(ellipse 600px 600px at 30% 40%, rgba(108,92,231,0.12), transparent),
-      radial-gradient(ellipse 500px 500px at 70% 60%, rgba(253,121,168,0.08), transparent),
-      radial-gradient(ellipse 400px 400px at 50% 80%, rgba(0,206,201,0.06), transparent);
+      radial-gradient(ellipse 600px 600px at 30% 40%, rgba(108,92,231,0.10), transparent),
+      radial-gradient(ellipse 500px 500px at 70% 60%, rgba(214,51,132,0.06), transparent),
+      radial-gradient(ellipse 400px 400px at 50% 80%, rgba(0,168,163,0.06), transparent);
     animation: heroBg 20s ease infinite alternate;
   }
   @keyframes heroBg {
@@ -90,8 +91,8 @@
   .hero .grid-overlay {
     position: absolute; inset: 0;
     background-image:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
     background-size: 60px 60px;
     mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 40%, transparent 100%);
   }
@@ -173,24 +174,32 @@
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 16px; padding: 2rem;
-    transition: border-color 0.3s, transform 0.3s;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
   }
-  .about-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .about-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(90,79,207,0.08);
+  }
   .about-card .icon {
     width: 44px; height: 44px; border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
     font-size: 1.2rem; margin-bottom: 1.2rem;
   }
-  .about-card:nth-child(1) .icon { background: rgba(108,92,231,0.15); color: var(--accent2); }
-  .about-card:nth-child(2) .icon { background: rgba(253,121,168,0.15); color: var(--accent3); }
-  .about-card:nth-child(3) .icon { background: rgba(0,206,201,0.15); color: var(--accent4); }
+  .about-card:nth-child(1) .icon { background: rgba(108,92,231,0.12); color: var(--accent2); }
+  .about-card:nth-child(2) .icon { background: rgba(214,51,132,0.12); color: var(--accent3); }
+  .about-card:nth-child(3) .icon { background: rgba(0,168,163,0.12); color: var(--accent4); }
   .about-card h3 {
     font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.6rem;
   }
   .about-card p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.7; }
 
   /* ---- SCHEDULE ---- */
-  #schedule { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  #schedule {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
   .timeline { position: relative; }
   .timeline::before {
     content: ''; position: absolute; left: 28px; top: 0; bottom: 0;
@@ -202,14 +211,14 @@
   }
   .timeline-dot {
     width: 16px; height: 16px; border-radius: 50%;
-    border: 2px solid var(--accent); background: var(--bg);
+    border: 2px solid var(--accent); background: var(--surface);
     flex-shrink: 0; margin-top: 0.3rem;
     position: relative; left: 21px; z-index: 2;
   }
   .timeline-item:nth-child(2) .timeline-dot { border-color: var(--accent3); }
   .timeline-item:nth-child(3) .timeline-dot { border-color: var(--accent4); }
-  .timeline-item:nth-child(4) .timeline-dot { border-color: #fdcb6e; }
-  .timeline-item:nth-child(5) .timeline-dot { border-color: #55efc4; }
+  .timeline-item:nth-child(4) .timeline-dot { border-color: #d4a017; }
+  .timeline-item:nth-child(5) .timeline-dot { border-color: #16a085; }
   .timeline-item:nth-child(6) .timeline-dot { border-color: var(--accent2); }
   .timeline-body { padding-left: 1rem; }
   .timeline-time {
@@ -223,7 +232,7 @@
   .timeline-speaker {
     display: inline-block; margin-top: 0.6rem;
     font-size: 0.75rem; font-weight: 500; color: var(--accent3);
-    background: rgba(253,121,168,0.1);
+    background: rgba(214,51,132,0.1);
     padding: 0.15rem 0.7rem; border-radius: 100px;
   }
 
@@ -236,9 +245,12 @@
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 16px; padding: 2rem;
     display: flex; flex-direction: column; gap: 1rem;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
   }
-  .speaker-card:hover { border-color: var(--accent); }
+  .speaker-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(90,79,207,0.08);
+  }
   .speaker-header { display: flex; align-items: center; gap: 1rem; }
   .speaker-avatar {
     width: 56px; height: 56px; border-radius: 14px;
@@ -246,22 +258,22 @@
     font-family: var(--serif); font-size: 1.3rem; font-weight: 700;
     flex-shrink: 0;
   }
-  .speaker-card:nth-child(1) .speaker-avatar { background: rgba(108,92,231,0.2); color: var(--accent2); }
-  .speaker-card:nth-child(2) .speaker-avatar { background: rgba(253,121,168,0.2); color: var(--accent3); }
-  .speaker-card:nth-child(3) .speaker-avatar { background: rgba(0,206,201,0.2); color: var(--accent4); }
-  .speaker-card:nth-child(4) .speaker-avatar { background: rgba(253,203,110,0.2); color: #fdcb6e; }
-  .speaker-card:nth-child(5) .speaker-avatar { background: rgba(85,239,196,0.2); color: #55efc4; }
+  .speaker-card:nth-child(1) .speaker-avatar { background: rgba(108,92,231,0.15); color: var(--accent2); }
+  .speaker-card:nth-child(2) .speaker-avatar { background: rgba(214,51,132,0.15); color: var(--accent3); }
+  .speaker-card:nth-child(3) .speaker-avatar { background: rgba(0,168,163,0.15); color: var(--accent4); }
+  .speaker-card:nth-child(4) .speaker-avatar { background: rgba(212,160,23,0.15); color: #b8860b; }
+  .speaker-card:nth-child(5) .speaker-avatar { background: rgba(22,160,133,0.15); color: #16a085; }
   .speaker-info h3 { font-family: var(--serif); font-size: 1.1rem; }
   .speaker-info .role { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.15rem; }
   .speaker-tag {
     display: inline-block; font-size: 0.68rem; font-weight: 600;
     text-transform: uppercase; letter-spacing: 0.08em;
     padding: 0.15rem 0.6rem; border-radius: 100px;
-    background: rgba(108,92,231,0.15); color: var(--accent2);
+    background: rgba(108,92,231,0.12); color: var(--accent2);
     margin-top: -0.3rem; align-self: flex-start;
   }
-  .speaker-card:nth-child(4) .speaker-tag { background: rgba(253,203,110,0.15); color: #fdcb6e; }
-  .speaker-card:nth-child(5) .speaker-tag { background: rgba(85,239,196,0.15); color: #55efc4; }
+  .speaker-card:nth-child(4) .speaker-tag { background: rgba(212,160,23,0.12); color: #b8860b; }
+  .speaker-card:nth-child(5) .speaker-tag { background: rgba(22,160,133,0.12); color: #16a085; }
   .speaker-bio { font-size: 0.85rem; color: var(--text-dim); line-height: 1.75; }
   .speaker-link {
     font-size: 0.82rem; color: var(--accent2); text-decoration: none;
@@ -270,18 +282,25 @@
   .speaker-link:hover { color: var(--text); }
 
   /* ---- TOPICS ---- */
-  #topics { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  #topics {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
   .topics-list { display: flex; flex-direction: column; gap: 1rem; }
   .topic-item {
     display: flex; align-items: flex-start; gap: 1.5rem;
     background: var(--bg); border: 1px solid var(--border);
     border-radius: 14px; padding: 1.5rem 2rem;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
   }
-  .topic-item:hover { border-color: var(--accent); }
+  .topic-item:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(90,79,207,0.06);
+  }
   .topic-num {
     font-family: var(--serif); font-size: 1.8rem; color: var(--accent);
-    line-height: 1; flex-shrink: 0; width: 36px; opacity: 0.6;
+    line-height: 1; flex-shrink: 0; width: 36px; opacity: 0.7;
   }
   .topic-content h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; }
   .topic-content p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; }
@@ -293,26 +312,36 @@
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; padding: 1.2rem 1.6rem;
     font-size: 0.87rem; line-height: 1.7; color: var(--text-dim);
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
   }
-  .pub-item:hover { border-color: var(--accent); }
+  .pub-item:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(90,79,207,0.06);
+  }
   .pub-item strong { color: var(--text); font-weight: 500; }
   .pub-venue {
     display: inline-block; font-family: var(--mono); font-size: 0.7rem;
     font-weight: 500; color: var(--accent4);
-    background: rgba(0,206,201,0.1); padding: 0.1rem 0.5rem;
+    background: rgba(0,168,163,0.10); padding: 0.1rem 0.5rem;
     border-radius: 4px; margin-left: 0.3rem;
   }
 
   /* ---- RESOURCES ---- */
-  #resources { background: var(--surface); border-top: 1px solid var(--border); }
+  #resources {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
   .resources-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
   .resource-card {
     background: var(--bg); border: 1px solid var(--border);
     border-radius: 16px; padding: 2rem; text-align: center;
-    transition: border-color 0.3s, transform 0.3s;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
   }
-  .resource-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .resource-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(90,79,207,0.08);
+  }
   .resource-card .r-icon { font-size: 2rem; margin-bottom: 1rem; }
   .resource-card h3 { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.5rem; }
   .resource-card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
@@ -536,7 +565,7 @@
           </div>
         </div>
         <span class="speaker-tag">Presenter</span>
-        <div class="speaker-bio">Zhaolong Su is an PhD student at William Mary. He focuses on unified multimodal models, world models, and physical AI. His recent work includes UniGame(CVPR'26) and FedUMM(WWW'26).</div>
+        <div class="speaker-bio">Zhaolong Su is a Ph.D. student at William &amp; Mary. He focuses on unified multimodal models, world models, and physical AI. His recent work includes UniGame (CVPR'26) and FedUMM (WWW'26).</div>
       </div>
       <div class="speaker-card reveal">
         <div class="speaker-header">
