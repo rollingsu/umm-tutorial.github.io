@@ -4,382 +4,190 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Road to Convergence — CVPR 2026 Tutorial</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    /* ---- LIGHT PALETTE ---- */
-    --bg: #ffffff;
-    --surface: #f7f7fa;        /* very light grey for cards */
-    --surface2: #eef0f5;       /* slightly darker for badges/chips */
-    --border: #e3e5ec;         /* hairline borders */
-    --text: #14141c;           /* near-black body */
-    --text-dim: #5f6478;       /* muted secondary text */
-    --accent: #5a4fcf;         /* primary purple — slightly darker than dark version for contrast */
-    --accent2: #6c5ce7;        /* primary purple */
-    --accent3: #d63384;        /* darker pink for white-bg contrast */
-    --accent4: #00a8a3;        /* darker teal for white-bg contrast */
-    --gradient1: linear-gradient(135deg, #6c5ce7, #a29bfe);
-    --gradient2: linear-gradient(135deg, #fd79a8, #e17055);
-    --gradient3: linear-gradient(135deg, #00cec9, #81ecec);
-    --serif: 'DM Serif Display', Georgia, serif;
-    --sans: 'IBM Plex Sans', sans-serif;
-    --mono: 'JetBrains Mono', monospace;
-  }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    line-height: 1.7;
-    font-weight: 400;
-    overflow-x: hidden;
+    background: #fff;
+    color: #000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.75;
   }
 
-  /* ---- NAV ---- */
+  /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
+    background: #fff;
+    border-bottom: 1px solid #ddd;
     padding: 0 2rem;
-    transition: transform 0.3s;
   }
   nav .inner {
-    max-width: 1200px; margin: 0 auto;
+    max-width: 960px; margin: 0 auto;
     display: flex; align-items: center; justify-content: space-between;
-    height: 60px;
+    height: 52px;
   }
   nav .logo {
-    font-family: var(--serif); font-size: 1.1rem; color: var(--text);
-    text-decoration: none; letter-spacing: -0.02em;
+    font-size: 0.95rem; font-weight: 600; color: #000;
+    text-decoration: none;
   }
-  nav .logo span { color: var(--accent2); }
-  nav ul { list-style: none; display: flex; gap: 1.8rem; }
+  nav .logo span { color: #b8322e; }
+  nav ul { list-style: none; display: flex; gap: 1.6rem; }
   nav ul li a {
-    color: var(--text-dim); text-decoration: none; font-size: 0.82rem;
-    font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
-    transition: color 0.2s;
+    color: #000; text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; transition: color 0.2s;
   }
-  nav ul li a:hover { color: var(--text); }
+  nav ul li a:hover { color: #b8322e; }
 
-  /* ---- HERO ---- */
+  /* HERO */
   .hero {
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-    padding: 6rem 2rem 4rem;
+    min-height: 92vh;
+    display: flex; align-items: center;
+    padding: 8rem 2rem 5rem;
   }
-  .hero::before {
-    content: '';
-    position: absolute; top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background:
-      radial-gradient(ellipse 600px 600px at 30% 40%, rgba(108,92,231,0.10), transparent),
-      radial-gradient(ellipse 500px 500px at 70% 60%, rgba(214,51,132,0.06), transparent),
-      radial-gradient(ellipse 400px 400px at 50% 80%, rgba(0,168,163,0.06), transparent);
-    animation: heroBg 20s ease infinite alternate;
-  }
-  @keyframes heroBg {
-    0% { transform: translate(0,0) rotate(0deg); }
-    100% { transform: translate(-3%,2%) rotate(3deg); }
-  }
-  .hero .grid-overlay {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 40%, transparent 100%);
-  }
-  .hero-content {
-    position: relative; z-index: 2; text-align: center;
-    max-width: 900px;
-  }
+  .hero-content { max-width: 960px; margin: 0 auto; }
   .hero-badge {
-    display: inline-flex; align-items: center; gap: 0.6rem;
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 100px; padding: 0.4rem 1.2rem 0.4rem 0.6rem;
-    font-size: 0.78rem; font-weight: 500; color: var(--text-dim);
-    margin-bottom: 2rem;
-    animation: fadeUp 0.8s ease both;
-  }
-  .hero-badge .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--accent4); box-shadow: 0 0 10px var(--accent4);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+    display: inline-block;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: #b8322e;
+    margin-bottom: 1.5rem;
   }
   .hero h1 {
-    font-family: var(--serif); font-size: clamp(2.4rem, 5.5vw, 4.2rem);
-    line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 1.5rem;
-    animation: fadeUp 0.8s 0.15s ease both;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    line-height: 1.2; letter-spacing: -0.02em;
+    margin-bottom: 1.5rem; max-width: 720px; font-weight: 700;
   }
   .hero h1 em {
     font-style: italic;
-    background: var(--gradient1); -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #b8322e;
   }
   .hero p.subtitle {
-    font-size: 1.1rem; color: var(--text-dim); max-width: 640px;
-    margin: 0 auto 2.5rem; line-height: 1.8; font-weight: 300;
-    animation: fadeUp 0.8s 0.3s ease both;
+    font-size: 1rem; color: #000; max-width: 600px;
+    line-height: 1.8; margin-bottom: 3rem;
   }
   .hero-meta {
-    display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap;
-    animation: fadeUp 0.8s 0.45s ease both;
+    display: flex; gap: 3rem; flex-wrap: wrap;
+    border-top: 1px solid #ddd; padding-top: 1.5rem;
   }
-  .hero-meta .item {
-    display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+  .hero-meta .item { display: flex; flex-direction: column; gap: 0.15rem; }
+  .hero-meta .label {
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em;
+    color: #000; font-weight: 500;
   }
-  .hero-meta .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); }
-  .hero-meta .value { font-size: 0.95rem; font-weight: 600; }
-  .hero-meta .value.highlight { color: var(--accent2); }
+  .hero-meta .value { font-size: 0.9rem; font-weight: 600; }
+  .hero-meta .value.highlight { color: #b8322e; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ---- SECTIONS ---- */
+  /* SECTIONS */
   section { padding: 5rem 2rem; }
-  .container { max-width: 1100px; margin: 0 auto; }
+  .container { max-width: 960px; margin: 0 auto; }
 
   .section-label {
-    font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
-    text-transform: uppercase; letter-spacing: 0.15em;
-    color: var(--accent2); margin-bottom: 0.8rem;
+    font-size: 0.7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: #b8322e; margin-bottom: 0.6rem;
   }
   .section-title {
-    font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-    line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 1rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.25; letter-spacing: -0.01em;
+    margin-bottom: 0.6rem; font-weight: 700;
   }
   .section-desc {
-    color: var(--text-dim); font-size: 1rem; max-width: 640px;
-    line-height: 1.8; font-weight: 300; margin-bottom: 3rem;
+    color: #000; font-size: 0.92rem; max-width: 580px;
+    line-height: 1.8; margin-bottom: 2.5rem;
   }
 
-  /* ---- ABOUT ---- */
-  #about { border-top: 1px solid var(--border); }
-  .about-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;
-  }
-  .about-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px; padding: 2rem;
-    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  }
-  .about-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(90,79,207,0.08);
-  }
-  .about-card .icon {
-    width: 44px; height: 44px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; margin-bottom: 1.2rem;
-  }
-  .about-card:nth-child(1) .icon { background: rgba(108,92,231,0.12); color: var(--accent2); }
-  .about-card:nth-child(2) .icon { background: rgba(214,51,132,0.12); color: var(--accent3); }
-  .about-card:nth-child(3) .icon { background: rgba(0,168,163,0.12); color: var(--accent4); }
-  .about-card h3 {
-    font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.6rem;
-  }
-  .about-card p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.7; }
+  /* ABOUT */
+  #about { border-top: 1px solid #ddd; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+  .about-card { padding-left: 1rem; border-left: 2px solid #ddd; }
+  .about-card:first-child { border-left-color: #b8322e; }
+  .about-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .about-card p { font-size: 0.85rem; color: #000; line-height: 1.75; }
 
-  /* ---- SCHEDULE ---- */
-  #schedule {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+  /* SCHEDULE */
+  #schedule { border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+  .schedule-list { display: flex; flex-direction: column; }
+  .schedule-item {
+    display: grid; grid-template-columns: 140px 1fr; gap: 2rem;
+    padding: 1.5rem 0; border-bottom: 1px solid #ddd;
   }
-  .timeline { position: relative; }
-  .timeline::before {
-    content: ''; position: absolute; left: 28px; top: 0; bottom: 0;
-    width: 2px; background: var(--border);
-  }
-  .timeline-item {
-    display: flex; gap: 2rem; padding: 1.8rem 0;
-    position: relative;
-  }
-  .timeline-dot {
-    width: 16px; height: 16px; border-radius: 50%;
-    border: 2px solid var(--accent); background: var(--surface);
-    flex-shrink: 0; margin-top: 0.3rem;
-    position: relative; left: 21px; z-index: 2;
-  }
-  .timeline-item:nth-child(2) .timeline-dot { border-color: var(--accent3); }
-  .timeline-item:nth-child(3) .timeline-dot { border-color: var(--accent4); }
-  .timeline-item:nth-child(4) .timeline-dot { border-color: #d4a017; }
-  .timeline-item:nth-child(5) .timeline-dot { border-color: #16a085; }
-  .timeline-item:nth-child(6) .timeline-dot { border-color: var(--accent2); }
-  .timeline-body { padding-left: 1rem; }
-  .timeline-time {
-    font-family: var(--mono); font-size: 0.75rem; color: var(--accent2);
-    letter-spacing: 0.05em; margin-bottom: 0.3rem;
-  }
-  .timeline-body h3 {
-    font-family: var(--serif); font-size: 1.2rem; margin-bottom: 0.5rem;
-  }
-  .timeline-body p { font-size: 0.88rem; color: var(--text-dim); line-height: 1.7; max-width: 640px; }
-  .timeline-speaker {
-    display: inline-block; margin-top: 0.6rem;
-    font-size: 0.75rem; font-weight: 500; color: var(--accent3);
-    background: rgba(214,51,132,0.1);
-    padding: 0.15rem 0.7rem; border-radius: 100px;
-  }
+  .schedule-item:last-child { border-bottom: none; }
+  .schedule-time { font-size: 0.75rem; color: #000; padding-top: 0.2rem; }
+  .schedule-body h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .schedule-body p { font-size: 0.85rem; color: #000; line-height: 1.75; max-width: 640px; }
 
-  /* ---- SPEAKERS ---- */
-  #speakers { }
+  /* SPEAKERS */
+  #speakers { border-top: 1px solid #ddd; }
   .speakers-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: #ddd; border: 1px solid #ddd;
   }
   .speaker-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 16px; padding: 2rem;
-    display: flex; flex-direction: column; gap: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    background: #fff; padding: 1.8rem;
+    display: flex; flex-direction: column; gap: 0.4rem;
   }
-  .speaker-card:hover {
-    border-color: var(--accent);
-    box-shadow: 0 8px 24px rgba(90,79,207,0.08);
-  }
-  .speaker-header { display: flex; align-items: center; gap: 1rem; }
-  .speaker-avatar {
-    width: 56px; height: 56px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--serif); font-size: 1.3rem; font-weight: 700;
-    flex-shrink: 0;
-  }
-  .speaker-card:nth-child(1) .speaker-avatar { background: rgba(108,92,231,0.15); color: var(--accent2); }
-  .speaker-card:nth-child(2) .speaker-avatar { background: rgba(214,51,132,0.15); color: var(--accent3); }
-  .speaker-card:nth-child(3) .speaker-avatar { background: rgba(0,168,163,0.15); color: var(--accent4); }
-  .speaker-card:nth-child(4) .speaker-avatar { background: rgba(212,160,23,0.15); color: #b8860b; }
-  .speaker-card:nth-child(5) .speaker-avatar { background: rgba(22,160,133,0.15); color: #16a085; }
-  .speaker-info h3 { font-family: var(--serif); font-size: 1.1rem; }
-  .speaker-info .role { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.15rem; }
+  .speaker-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .speaker-card h3 { font-size: 1rem; font-weight: 600; }
+  .speaker-role { font-size: 0.8rem; color: #000; }
   .speaker-tag {
-    display: inline-block; font-size: 0.68rem; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    padding: 0.15rem 0.6rem; border-radius: 100px;
-    background: rgba(108,92,231,0.12); color: var(--accent2);
-    margin-top: -0.3rem; align-self: flex-start;
+    font-size: 0.68rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: #b8322e; margin-top: 0.2rem;
   }
-  .speaker-card:nth-child(4) .speaker-tag { background: rgba(212,160,23,0.12); color: #b8860b; }
-  .speaker-card:nth-child(5) .speaker-tag { background: rgba(22,160,133,0.12); color: #16a085; }
-  .speaker-bio { font-size: 0.85rem; color: var(--text-dim); line-height: 1.75; }
+  .speaker-bio { font-size: 0.82rem; color: #000; line-height: 1.75; margin-top: 0.3rem; }
   .speaker-link {
-    font-size: 0.82rem; color: var(--accent2); text-decoration: none;
-    font-weight: 500; transition: color 0.2s;
+    font-size: 0.8rem; color: #b8322e; text-decoration: none; font-weight: 500;
   }
-  .speaker-link:hover { color: var(--text); }
+  .speaker-link:hover { text-decoration: underline; }
 
-  /* ---- TOPICS ---- */
-  #topics {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-  .topics-list { display: flex; flex-direction: column; gap: 1rem; }
+  /* TOPICS */
+  #topics { border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+  .topics-list { display: flex; flex-direction: column; }
   .topic-item {
-    display: flex; align-items: flex-start; gap: 1.5rem;
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: 14px; padding: 1.5rem 2rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    display: grid; grid-template-columns: 2rem 1fr; gap: 1rem;
+    padding: 1.2rem 0; border-bottom: 1px solid #ddd;
   }
-  .topic-item:hover {
-    border-color: var(--accent);
-    box-shadow: 0 4px 16px rgba(90,79,207,0.06);
-  }
-  .topic-num {
-    font-family: var(--serif); font-size: 1.8rem; color: var(--accent);
-    line-height: 1; flex-shrink: 0; width: 36px; opacity: 0.7;
-  }
-  .topic-content h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; }
-  .topic-content p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.7; }
+  .topic-item:last-child { border-bottom: none; }
+  .topic-num { font-size: 0.8rem; color: #000; padding-top: 0.1rem; font-weight: 600; }
+  .topic-content h3 { font-size: 0.92rem; font-weight: 600; margin-bottom: 0.2rem; }
+  .topic-content p { font-size: 0.85rem; color: #000; line-height: 1.7; }
 
-  /* ---- PUBLICATIONS ---- */
-  #publications {}
-  .pub-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  /* PUBLICATIONS */
+  #publications { border-top: 1px solid #ddd; }
+  .pub-list { display: flex; flex-direction: column; }
   .pub-item {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.2rem 1.6rem;
-    font-size: 0.87rem; line-height: 1.7; color: var(--text-dim);
-    transition: border-color 0.3s, box-shadow 0.3s;
+    padding: 0.9rem 0; border-bottom: 1px solid #ddd;
+    font-size: 0.85rem; line-height: 1.7; color: #000;
   }
-  .pub-item:hover {
-    border-color: var(--accent);
-    box-shadow: 0 4px 16px rgba(90,79,207,0.06);
-  }
-  .pub-item strong { color: var(--text); font-weight: 500; }
-  .pub-venue {
-    display: inline-block; font-family: var(--mono); font-size: 0.7rem;
-    font-weight: 500; color: var(--accent4);
-    background: rgba(0,168,163,0.10); padding: 0.1rem 0.5rem;
-    border-radius: 4px; margin-left: 0.3rem;
+  .pub-item:last-child { border-bottom: none; }
+  .pub-item strong { color: #000; font-weight: 500; }
+  .pub-venue { font-size: 0.72rem; font-weight: 600; color: #b8322e; }
+
+  /* RESOURCES */
+  #resources { border-top: 1px solid #ddd; }
+  .resources-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; }
+  .resource-item h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem; }
+  .resource-item p { font-size: 0.82rem; color: #000; line-height: 1.7; }
+  .resource-item .badge {
+    display: inline-block; margin-top: 0.5rem;
+    font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: #000;
   }
 
-  /* ---- RESOURCES ---- */
-  #resources {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-  }
-  .resources-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
-  .resource-card {
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: 16px; padding: 2rem; text-align: center;
-    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  }
-  .resource-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(90,79,207,0.08);
-  }
-  .resource-card .r-icon { font-size: 2rem; margin-bottom: 1rem; }
-  .resource-card h3 { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.5rem; }
-  .resource-card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
-  .resource-card .badge {
-    display: inline-block; margin-top: 1rem;
-    font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.08em; padding: 0.3rem 0.9rem;
-    border-radius: 100px; border: 1px solid var(--border);
-    color: var(--text-dim);
-  }
+  /* FOOTER */
+  footer { border-top: 1px solid #ddd; padding: 2.5rem 2rem; }
+  footer p { font-size: 0.8rem; color: #000; max-width: 960px; margin: 0 auto; }
+  footer a { color: #b8322e; text-decoration: none; }
 
-  /* ---- FOOTER ---- */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 3rem 2rem;
-    text-align: center;
-  }
-  footer p { font-size: 0.82rem; color: var(--text-dim); }
-  footer a { color: var(--accent2); text-decoration: none; }
-
-  /* ---- MOBILE ---- */
+  /* MOBILE */
   @media (max-width: 768px) {
     nav ul { display: none; }
-    .about-grid, .resources-grid { grid-template-columns: 1fr; }
-    .speakers-grid { grid-template-columns: 1fr; }
+    .about-grid, .speakers-grid, .resources-grid { grid-template-columns: 1fr; }
+    .schedule-item { grid-template-columns: 1fr; gap: 0.5rem; }
     .hero-meta { gap: 1.5rem; }
-    .topic-item { flex-direction: column; gap: 0.8rem; }
-    .timeline::before { left: 18px; }
-    .timeline-dot { left: 11px; }
     section { padding: 3.5rem 1.2rem; }
   }
-
-  /* ---- SCROLL ANIMATIONS ---- */
-  .reveal {
-    opacity: 0; transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -401,12 +209,8 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="grid-overlay"></div>
   <div class="hero-content">
-    <div class="hero-badge">
-      <span class="dot"></span>
-      CVPR 2026 Tutorial
-    </div>
+    <div class="hero-badge">CVPR 2026 Tutorial</div>
     <h1>The Road to <em>Convergence</em>:<br>Evolution of Unified Multimodal Models</h1>
     <p class="subtitle">A comprehensive tutorial on the architecture design, representation learning, training dynamics, and evaluation of unified multimodal models that integrate understanding and generation within a single framework.</p>
     <div class="hero-meta">
@@ -433,22 +237,19 @@
 <!-- ABOUT -->
 <section id="about">
   <div class="container">
-    <div class="section-label reveal">Overview</div>
-    <div class="section-title reveal">Three Central Questions</div>
-    <div class="section-desc reveal">We structure this tutorial around three fundamental questions that define the design space of unified multimodal models.</div>
+    <div class="section-label">Overview</div>
+    <div class="section-title">Three Central Questions</div>
+    <div class="section-desc">We structure this tutorial around three fundamental questions that define the design space of unified multimodal models.</div>
     <div class="about-grid">
-      <div class="about-card reveal">
-        <div class="icon">🏗</div>
+      <div class="about-card">
         <h3>How to Model?</h3>
         <p>A systematic taxonomy of UMM architectures — External Expert Integration, Modular Joint Modeling, and End-to-End Unified Modeling — with trade-off analysis between autoregressive, diffusion, and hybrid approaches.</p>
       </div>
-      <div class="about-card reveal">
-        <div class="icon">🧩</div>
+      <div class="about-card">
         <h3>How to Represent?</h3>
         <p>The "Unified Tokenizer" debate: continuous representations (e.g., CLIP) vs. discrete tokens (e.g., VQ-VAE), and hybrid encoding strategies balancing semantic understanding with generative fidelity.</p>
       </div>
-      <div class="about-card reveal">
-        <div class="icon">⚡</div>
+      <div class="about-card">
         <h3>How to Train?</h3>
         <p>The full training lifecycle — from constructing interleaved image-text data to unified pre-training objectives and advanced post-training alignment methods such as DPO and GRPO.</p>
       </div>
@@ -459,54 +260,48 @@
 <!-- SCHEDULE -->
 <section id="schedule">
   <div class="container">
-    <div class="section-label reveal">Schedule</div>
-    <div class="section-title reveal">Tutorial Outline</div>
-    <div class="section-desc reveal">A structured half-day journey from foundational motivations to advanced architectures and practical training recipes.</div>
-    <div class="timeline">
-      <div class="timeline-item reveal">
-        <div class="timeline-dot"></div>
-        <div class="timeline-body">
-          <div class="timeline-time">Session 1 · 30 min</div>
+    <div class="section-label">Schedule</div>
+    <div class="section-title">Tutorial Outline</div>
+    <div class="section-desc">A structured half-day journey from foundational motivations to advanced architectures and practical training recipes.</div>
+    <div class="schedule-list">
+      <div class="schedule-item">
+        <div class="schedule-time">Session 1<br>30 min</div>
+        <div class="schedule-body">
           <h3>Introduction &amp; Motivation</h3>
           <p>Tracing the evolution of multimodal AI from isolated expertise to Unified Multimodal Models. We introduce the core motivations driving unification — particularly the mutual reinforcement between understanding and generation — and provide a rigorous definition of UMMs.</p>
         </div>
       </div>
-      <div class="timeline-item reveal">
-        <div class="timeline-dot"></div>
-        <div class="timeline-body">
-          <div class="timeline-time">Session 2 · 45 min</div>
+      <div class="schedule-item">
+        <div class="schedule-time">Session 2<br>45 min</div>
+        <div class="schedule-body">
           <h3>Modeling Architectures</h3>
           <p>A systematic taxonomy including External Expert Integration, Modular Joint Modeling, and End-to-End Unified Modeling. Deep dive into trade-offs between autoregressive, diffusion, and emerging AR-Diffusion hybrid approaches.</p>
         </div>
       </div>
-      <div class="timeline-item reveal">
-        <div class="timeline-dot"></div>
-        <div class="timeline-body">
-          <div class="timeline-time">Session 3 · 45 min</div>
+      <div class="schedule-item">
+        <div class="schedule-time">Session 3<br>45 min</div>
+        <div class="schedule-body">
           <h3>The Unified Tokenizer Challenge</h3>
           <p>Comparing continuous representations versus discrete tokenization schemes. Review of encoding/decoding strategies and state-of-the-art hybrid approaches — cascade and dual-branch designs — bridging semantic richness with generative fidelity.</p>
         </div>
       </div>
-      <div class="timeline-item reveal">
-        <div class="timeline-dot"></div>
-        <div class="timeline-body">
-          <div class="timeline-time">Session 4 · 45 min</div>
+      <div class="schedule-item">
+        <div class="schedule-time">Session 4<br>45 min</div>
+        <div class="schedule-body">
           <h3>Training Recipes &amp; Data</h3>
           <p>Constructing high-quality modality-interleaved datasets, unified pre-training objectives, and advanced post-training alignment methods including preference-based approaches such as DPO and GRPO.</p>
         </div>
       </div>
-      <div class="timeline-item reveal">
-        <div class="timeline-dot"></div>
-        <div class="timeline-body">
-          <div class="timeline-time">Session 5 · 30 min</div>
+      <div class="schedule-item">
+        <div class="schedule-time">Session 5<br>30 min</div>
+        <div class="schedule-body">
           <h3>Evaluation, Applications &amp; Future Directions</h3>
           <p>Reviewing existing benchmarks for standardized evaluation, discussing real-world applications in robotics and autonomous driving, and highlighting open challenges including scalable unified tokenizers and unified world models.</p>
         </div>
       </div>
-      <div class="timeline-item reveal">
-        <div class="timeline-dot"></div>
-        <div class="timeline-body">
-          <div class="timeline-time">Session 6 · 15 min</div>
+      <div class="schedule-item">
+        <div class="schedule-time">Session 6<br>15 min</div>
+        <div class="schedule-body">
           <h3>Unified Codebase &amp; Integration</h3>
           <p>A practical walkthrough of our unified multimodal codebase, explaining how core components — tokenizers, multimodal encoders, and generative backbones — are organized and connected in practice.</p>
         </div>
@@ -518,64 +313,39 @@
 <!-- SPEAKERS -->
 <section id="speakers">
   <div class="container">
-    <div class="section-label reveal">Presenters</div>
-    <div class="section-title reveal">Meet the Team</div>
-    <div class="section-desc reveal">Our tutorial is led by researchers from academia and industry with extensive experience in multimodal foundation models.</div>
+    <div class="section-label">Presenters</div>
+    <div class="section-title">Meet the Team</div>
+    <div class="section-desc">Our tutorial is led by researchers from academia and industry with extensive experience in multimodal foundation models.</div>
     <div class="speakers-grid">
-      <div class="speaker-card reveal">
-        <div class="speaker-header">
-          <div class="speaker-avatar">JW</div>
-          <div class="speaker-info">
-            <h3>Jindong Wang</h3>
-            <div class="role">Assistant Professor, William &amp; Mary</div>
-          </div>
-        </div>
+      <div class="speaker-card">
+        <h3>Jindong Wang</h3>
+        <div class="speaker-role">Assistant Professor, William &amp; Mary</div>
         <span class="speaker-tag">Presenter</span>
         <div class="speaker-bio">Faculty member of the Future of Life Institute. Former Senior Researcher at Microsoft Research Asia. 60+ papers with 23,000+ citations (h-index 54). World's Top 2% Highly Cited Scientists. Extensive tutorial experience at IJCAI, WSDM, KDD, AAAI, and CVPR.</div>
         <a href="https://jd92.wang/" target="_blank" class="speaker-link">jd92.wang →</a>
       </div>
-      <div class="speaker-card reveal">
-        <div class="speaker-header">
-          <div class="speaker-avatar">HC</div>
-          <div class="speaker-info">
-            <h3>Hao Chen</h3>
-            <div class="role">Research Scientist, DeepMind</div>
-          </div>
-        </div>
+      <div class="speaker-card">
+        <h3>Hao Chen</h3>
+        <div class="speaker-role">Research Scientist, DeepMind</div>
         <span class="speaker-tag">Presenter</span>
         <div class="speaker-bio">Ph.D. from Carnegie Mellon University (advised by Prof. Bhiksha Raj). Research on data-centric learning for reliable foundation models, including pre-training data imperfections, catastrophic inheritance, and multimodal generalization. Published at NeurIPS, ICML, and ICLR.</div>
       </div>
-      <div class="speaker-card reveal">
-        <div class="speaker-header">
-          <div class="speaker-avatar">JH</div>
-          <div class="speaker-info">
-            <h3>Jiakui Hu</h3>
-            <div class="role">Ph.D. Student, Peking University</div>
-          </div>
-        </div>
+      <div class="speaker-card">
+        <h3>Jiakui Hu</h3>
+        <div class="speaker-role">Ph.D. Student, Peking University</div>
         <span class="speaker-tag">Presenter</span>
         <div class="speaker-bio">Research on unified models, computational imaging, and inductive biases in visual foundation models. First-author papers at ICCV, CVPR, ICLR, ICML, and AAAI. Reviewer for major conferences and journals.</div>
       </div>
-      <div class="speaker-card reveal">
-        <div class="speaker-header">
-          <div class="speaker-avatar">ZS</div>
-          <div class="speaker-info">
-            <h3>Zhaolong Su</h3>
-            <div class="role">Ph.D. Student, William &amp; Mary</div>
-          </div>
-        </div>
+      <div class="speaker-card">
+        <h3>Zhaolong Su</h3>
+        <div class="speaker-role">Ph.D. Student, William &amp; Mary</div>
         <span class="speaker-tag">Presenter</span>
         <div class="speaker-bio">Zhaolong Su is a Ph.D. student at William &amp; Mary. He focuses on unified multimodal models, world models, and physical AI. His unified model work includes UniGame (CVPR'26) and FedUMM (WWW'26).</div>
         <a href="https://rollingsu.github.io/" target="_blank" class="speaker-link">rollingsu.github.io →</a>
       </div>
-      <div class="speaker-card reveal">
-        <div class="speaker-header">
-          <div class="speaker-avatar">SL</div>
-          <div class="speaker-info">
-            <h3>Sharon Li</h3>
-            <div class="role">Associate Professor, UW–Madison</div>
-          </div>
-        </div>
+      <div class="speaker-card">
+        <h3>Sharon Li</h3>
+        <div class="speaker-role">Associate Professor, UW–Madison</div>
         <span class="speaker-tag">Advisor</span>
         <div class="speaker-bio">Research on reliable and safe AI systems. Alfred P. Sloan Fellowship and MIT Technology Review Innovators Under 35 recipient. Ph.D. from Cornell University, postdoc at Stanford University.</div>
       </div>
@@ -586,39 +356,39 @@
 <!-- TOPICS -->
 <section id="topics">
   <div class="container">
-    <div class="section-label reveal">Coverage</div>
-    <div class="section-title reveal">Key Topics</div>
-    <div class="section-desc reveal">From architectural paradigms to real-world deployment, the tutorial covers the full spectrum of unified multimodal model research.</div>
+    <div class="section-label">Coverage</div>
+    <div class="section-title">Key Topics</div>
+    <div class="section-desc">From architectural paradigms to real-world deployment, the tutorial covers the full spectrum of unified multimodal model research.</div>
     <div class="topics-list">
-      <div class="topic-item reveal">
+      <div class="topic-item">
         <div class="topic-num">01</div>
         <div class="topic-content">
           <h3>Evolution of Multimodal Models</h3>
           <p>From isolated multimodal understanding or generation systems to unified multimodal foundation models capable of handling both tasks simultaneously.</p>
         </div>
       </div>
-      <div class="topic-item reveal">
+      <div class="topic-item">
         <div class="topic-num">02</div>
         <div class="topic-content">
           <h3>Modeling Paradigms for UMMs</h3>
           <p>A taxonomy of architectures including External Expert Integration, Modular Joint Modeling, and End-to-End Unified Modeling, with comparisons between autoregressive, diffusion, and hybrid approaches.</p>
         </div>
       </div>
-      <div class="topic-item reveal">
+      <div class="topic-item">
         <div class="topic-num">03</div>
         <div class="topic-content">
           <h3>Unified Tokenizer &amp; Representation Design</h3>
           <p>Continuous versus discrete representations, their advantages and limitations, and emerging hybrid encoding strategies that balance semantic understanding and generative fidelity.</p>
         </div>
       </div>
-      <div class="topic-item reveal">
+      <div class="topic-item">
         <div class="topic-num">04</div>
         <div class="topic-content">
           <h3>Training Lifecycle &amp; Alignment</h3>
           <p>Construction of modality-interleaved datasets, unified pre-training objectives, and post-training alignment methods such as DPO and GRPO.</p>
         </div>
       </div>
-      <div class="topic-item reveal">
+      <div class="topic-item">
         <div class="topic-num">05</div>
         <div class="topic-content">
           <h3>Benchmarks, Applications &amp; Open Challenges</h3>
@@ -632,32 +402,32 @@
 <!-- PUBLICATIONS -->
 <section id="publications">
   <div class="container">
-    <div class="section-label reveal">Related Work</div>
-    <div class="section-title reveal">Selected Publications</div>
-    <div class="section-desc reveal">Representative publications by the organizers and foundational research in unified multimodal models.</div>
+    <div class="section-label">Related Work</div>
+    <div class="section-title">Selected Publications</div>
+    <div class="section-desc">Representative publications by the organizers and foundational research in unified multimodal models.</div>
     <div class="pub-list">
-      <div class="pub-item reveal">
+      <div class="pub-item">
         <strong>Jiakui Hu, et al.</strong> Unified Multimodal Understanding and Generation Models: Advances, Challenges, and Opportunities. <span class="pub-venue">Survey</span>
       </div>
-      <div class="pub-item reveal">
+      <div class="pub-item">
         <strong>Jindong Wang, Hao Chen, et al.</strong> On Fairness of Unified Multimodal Large Language Models for Image Generation. <span class="pub-venue">NeurIPS 2025</span>
       </div>
-      <div class="pub-item reveal">
+      <div class="pub-item">
         <strong>Jindong Wang, Hao Chen, et al.</strong> Is Your (Reasoning) Multimodal Language Model Vulnerable toward Distractions? <span class="pub-venue">AAAI 2026</span>
       </div>
-      <div class="pub-item reveal">
+      <div class="pub-item">
         <strong>Hao Chen, et al.</strong> ImageFolder: Autoregressive Image Generation with Folded Tokens. <span class="pub-venue">ICLR 2025</span>
       </div>
-      <div class="pub-item reveal">
+      <div class="pub-item">
         <strong>Hao Chen, et al.</strong> Masked Autoencoders Are Effective Tokenizers for Diffusion Models. <span class="pub-venue">ICML 2025</span>
       </div>
-      <div class="pub-item reveal">
+      <div class="pub-item">
         <strong>Sharon Li, et al.</strong> Understanding Multimodal LLMs Under Distribution Shifts: An Information-Theoretic Approach. <span class="pub-venue">ICML 2025 Oral</span>
       </div>
-      <div class="pub-item reveal">
+      <div class="pub-item">
         <strong>Jindong Wang, et al.</strong> Open-Vocabulary Calibration for Vision–Language Models. <span class="pub-venue">ICML 2024</span>
       </div>
-      <div class="pub-item reveal">
+      <div class="pub-item">
         <strong>Zhaolong Su, Hao Chen, Jindong Wang, et al.</strong> UniGame: Turning a Unified Multimodal Model Into Its Own Adversary. <span class="pub-venue">CVPR 2026</span>
       </div>
     </div>
@@ -667,24 +437,21 @@
 <!-- RESOURCES -->
 <section id="resources">
   <div class="container">
-    <div class="section-label reveal">Open Science</div>
-    <div class="section-title reveal">Materials &amp; Resources</div>
-    <div class="section-desc reveal">We are committed to open science and ensuring reproducibility. All materials will be publicly available.</div>
+    <div class="section-label">Open Science</div>
+    <div class="section-title">Materials &amp; Resources</div>
+    <div class="section-desc">We are committed to open science and ensuring reproducibility. All materials will be publicly available.</div>
     <div class="resources-grid">
-      <div class="resource-card reveal">
-        <div class="r-icon">📑</div>
+      <div class="resource-item">
         <h3>Slides</h3>
         <p>All presentation slides will be made publicly available on this website following the event.</p>
         <span class="badge">Coming Soon</span>
       </div>
-      <div class="resource-card reveal">
-        <div class="r-icon">📚</div>
+      <div class="resource-item">
         <h3>Bibliography</h3>
         <p>An annotated compilation of all references discussed in the tutorial as a comprehensive reading list.</p>
         <span class="badge">Coming Soon</span>
       </div>
-      <div class="resource-card reveal">
-        <div class="r-icon">💻</div>
+      <div class="resource-item">
         <h3>Codebase</h3>
         <p>Open-source unified multimodal codebase with annotated pointers to models (e.g., Emu, Janus) and datasets.</p>
         <span class="badge">Coming Soon</span>
@@ -698,12 +465,5 @@
   <p>CVPR 2026 Tutorial — The Road to Convergence · <a href="https://umm-tutorial.github.io" target="_blank">umm-tutorial.github.io</a></p>
 </footer>
 
-<script>
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
 </body>
 </html>
