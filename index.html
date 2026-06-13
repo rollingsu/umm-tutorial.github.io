@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Road to Convergence — CVPR 2026 Tutorial</title>
+<meta name="citation_title" content="The Road to Convergence: Evolution of Unified Multimodal Models">
+<meta name="citation_author" content="Jindong Wang">
+<meta name="citation_author" content="Hao Chen">
+<meta name="citation_author" content="Jiakui Hu">
+<meta name="citation_author" content="Zhaolong Su">
+<meta name="citation_author" content="Sharon Li">
+<meta name="citation_publication_date" content="2026">
+<meta name="citation_conference_title" content="CVPR 2026 Tutorial">
+<meta name="citation_pdf_url" content="https://umm-tutorial.github.io/slides/Unified_Models_CVPR2026_Tutorial.pptx.pdf">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -184,6 +193,58 @@
   }
   .resource-link:hover { text-decoration: underline; }
 
+
+  /* CITE */
+  #cite { border-top: 1px solid #ddd; }
+  .cite-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .cite-card {
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 1.2rem;
+  }
+  .cite-card h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .cite-text, .cite-card pre {
+    width: 100%;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    padding: 0.9rem;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: #000;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  }
+  .copy-btn {
+    display: inline-block;
+    margin-top: 0.7rem;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid #b8322e;
+    background: #fff;
+    color: #b8322e;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .copy-btn:hover {
+    background: #b8322e;
+    color: #fff;
+  }
+  .copy-btn.copied {
+    background: #b8322e;
+    color: #fff;
+  }
+
   /* FOOTER */
   footer { border-top: 1px solid #ddd; padding: 2.5rem 2rem; }
   footer p { font-size: 0.8rem; color: #000; max-width: 960px; margin: 0 auto; }
@@ -212,6 +273,7 @@
       <li><a href="#topics">Topics</a></li>
       <li><a href="#publications">Papers</a></li>
       <li><a href="#resources">Resources</a></li>
+      <li><a href="#cite">Cite</a></li>
     </ul>
   </div>
 </nav>
@@ -426,10 +488,85 @@
   </div>
 </section>
 
+
+<!-- CITE -->
+<section id="cite">
+  <div class="container">
+    <div class="section-label">Citation</div>
+    <div class="section-title">Cite This Tutorial</div>
+    <div class="section-desc">If you find this tutorial useful, please cite the tutorial website or slides using one of the formats below.</div>
+
+    <div class="cite-grid">
+      <div class="cite-card">
+        <h3>BibTeX</h3>
+        <pre id="cite-bibtex">@misc{wang2026roadconvergence,
+  title        = {The Road to Convergence: Evolution of Unified Multimodal Models},
+  author       = {Wang, Jindong and Chen, Hao and Hu, Jiakui and Su, Zhaolong and Li, Sharon},
+  year         = {2026},
+  howpublished = {CVPR 2026 Tutorial},
+  url          = {https://umm-tutorial.github.io}
+}</pre>
+        <button class="copy-btn" type="button" onclick="copyCitation('cite-bibtex', this)">Copy BibTeX</button>
+      </div>
+
+      <div class="cite-card">
+        <h3>APA</h3>
+        <div class="cite-text" id="cite-apa">Wang, J., Chen, H., Hu, J., Su, Z., &amp; Li, S. (2026). <em>The Road to Convergence: Evolution of Unified Multimodal Models</em>. CVPR 2026 Tutorial. https://umm-tutorial.github.io</div>
+        <button class="copy-btn" type="button" onclick="copyCitation('cite-apa', this)">Copy APA</button>
+      </div>
+
+      <div class="cite-card">
+        <h3>MLA</h3>
+        <div class="cite-text" id="cite-mla">Wang, Jindong, et al. <em>The Road to Convergence: Evolution of Unified Multimodal Models</em>. CVPR 2026 Tutorial, 2026, https://umm-tutorial.github.io.</div>
+        <button class="copy-btn" type="button" onclick="copyCitation('cite-mla', this)">Copy MLA</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <p>CVPR 2026 Tutorial — The Road to Convergence · <a href="https://umm-tutorial.github.io" target="_blank">umm-tutorial.github.io</a></p>
 </footer>
+
+<script>
+  function copyCitation(id, button) {
+    const element = document.getElementById(id);
+    const text = element.innerText.trim();
+
+    const setCopied = () => {
+      const originalText = button.innerText;
+      button.innerText = 'Copied';
+      button.classList.add('copied');
+      setTimeout(() => {
+        button.innerText = originalText;
+        button.classList.remove('copied');
+      }, 1600);
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(setCopied).catch(() => fallbackCopy(text, setCopied));
+    } else {
+      fallbackCopy(text, setCopied);
+    }
+  }
+
+  function fallbackCopy(text, callback) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      callback();
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
+</script>
 
 </body>
 </html>
